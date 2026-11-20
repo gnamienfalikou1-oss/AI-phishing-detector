@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import pickle
 import re
@@ -296,8 +296,8 @@ def get_ml_prediction(url: str) -> tuple:
 # Routes
 # ──────────────────────────────────────────────
 
-@app.route("/")
-def home():
+@app.route("/health")
+def health():
     return "Phishing Detection API is running!"
 
 
@@ -478,6 +478,22 @@ def predict():
             "ml_phishing_probability": ml_phishing_probability,
         }
     })
+
+
+# ──────────────────────────────────────────────
+# Serve the frontend from the same server (for online hosting)
+# ──────────────────────────────────────────────
+FRONTEND_DIR = os.path.join(BASE_DIR, "frontend")
+
+
+@app.route("/")
+def home():
+    return send_from_directory(FRONTEND_DIR, "index.html")
+
+
+@app.route("/<path:filename>")
+def frontend_files(filename):
+    return send_from_directory(FRONTEND_DIR, filename)
 
 
 if __name__ == "__main__":
