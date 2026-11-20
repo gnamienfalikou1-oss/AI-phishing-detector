@@ -3,7 +3,8 @@
    Handles API calls, chart rendering, UI updates
 ═══════════════════════════════════════════ */
 
-const API_URL = "http://127.0.0.1:5000/predict";
+// Opened as a local file -> local API; served online (or at http://127.0.0.1:5000) -> same-server API
+const API_URL = window.location.protocol === "file:" ? "http://127.0.0.1:5000/predict" : "/predict";
 
 // ── Chart instances (kept for destroy/redraw) ──
 let gaugeChartInst  = null;
